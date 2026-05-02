@@ -47,10 +47,19 @@ def get_tasks():
     cursor = conn.cursor(dictionary=True)
 
     if role == "admin":
-        cursor.execute("SELECT * FROM tasks")
+        cursor.execute("""
+            SELECT t.*, u.name as assignee_name, p.name as project_name 
+            FROM tasks t
+            LEFT JOIN users u ON t.assigned_to = u.id
+            LEFT JOIN projects p ON t.project_id = p.id
+        """)
     else:
         cursor.execute("""
-            SELECT * FROM tasks WHERE assigned_to = %s
+            SELECT t.*, u.name as assignee_name, p.name as project_name 
+            FROM tasks t
+            LEFT JOIN users u ON t.assigned_to = u.id
+            LEFT JOIN projects p ON t.project_id = p.id
+            WHERE t.assigned_to = %s
         """, (user_id,))
 
     tasks = cursor.fetchall()

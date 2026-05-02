@@ -99,7 +99,7 @@ function loadTasks() {
 
         if (tasks.length === 0) {
             document.getElementById("taskList").innerHTML =
-                "<tr><td colspan='6' style='text-align: center'>No tasks found</td></tr>";
+                "<tr><td colspan='7' style='text-align: center'>No tasks found</td></tr>";
             return;
         }
 
@@ -109,7 +109,8 @@ function loadTasks() {
 
             html += `<tr>
                 <td>${t.title}</td>
-                <td>${t.project_id || '-'}</td>
+                <td>${t.project_name || '-'}</td>
+                <td>${t.assignee_name || 'Unassigned'} (ID: ${t.assigned_to})</td>
                 <td>${t.deadline ? new Date(t.deadline).toLocaleDateString() : 'No deadline'}</td>
                 <td>
                     <span class="status ${t.status || 'pending'}">
