@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskApp | Tasks</title>
+    <link rel="stylesheet" href="/static/landing.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .app-layout {
+            display: flex;
+            min-height: 100vh;
+            background-color: #0f172a;
+        }
+
+        /* Sidebar styling */
+        .sidebar {
+            width: 250px;
+            background: rgba(15, 23, 42, 0.8);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(90deg, #c084fc, #38bdf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        .sidebar-user {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 13px;
+            margin-bottom: 30px;
+            font-weight: 500;
+            text-transform: capitalize;
+        }
+
+        .sidebar a {
+            color: #94a3b8;
+            text-decoration: none;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .sidebar a:hover, .sidebar a.active {
+            background: rgba(124, 58, 237, 0.1);
+            color: #c084fc;
+        }
+
+        .sidebar .logout {
+            margin-top: auto;
+            color: #ef4444;
+        }
+        .sidebar .logout:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+        }
+
+        /* Main Content styling */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .header-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .header-area h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 36px;
+            margin: 0;
+            color: white;
+        }
+
+        /* Forms & Tables */
+        .admin-panel {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: flex-end;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .form-group label {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .admin-panel h3 {
+            width: 100%;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-family: 'Outfit', sans-serif;
+            color: #c084fc;
+        }
+
+        .admin-panel input, .admin-panel select, .admin-panel textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
+            color: white;
+            font-size: 14px;
+            outline: none;
+            box-sizing: border-box;
+        }
+        .admin-panel select option {
+            background: #0f172a;
+            color: white;
+        }
+
+        .admin-panel button {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #7c3aed, #3b82f6);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .admin-panel button:hover {
+            box-shadow: 0 5px 15px rgba(124, 58, 237, 0.4);
+            transform: translateY(-2px);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        th, td {
+            padding: 18px 20px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        th {
+            background: rgba(15, 23, 42, 0.5);
+            color: #94a3b8;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 1px;
+        }
+
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: rgba(255, 255, 255, 0.02); }
+
+        .status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .status.pending { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+        .status.in_progress { background: rgba(56, 189, 248, 0.1); color: #38bdf8; }
+        .status.completed { background: rgba(34, 197, 94, 0.1); color: #22c55e; }
+
+        select.status-select {
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
+            color: white;
+            outline: none;
+            cursor: pointer;
+        }
+        select.status-select option { background: #0f172a; }
+
+        .delete-btn {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: 500;
+        }
+        .delete-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        #toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1e293b;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            opacity: 0;
+            transition: 0.3s;
+            z-index: 1000;
+        }
+        #toast.show { opacity: 1; }
+    </style>
+</head>
+<body class="landing-body">
+    <div class="bg-blobs">
+        <div class="blob1"></div>
+        <div class="blob2"></div>
+    </div>
+
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <h2>TaskApp.</h2>
+            <div id="sidebarUser" class="sidebar-user"></div>
+            <a href="/dashboard-page"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
+            <a href="/projects-page"><i class="fa-solid fa-folder"></i> Projects</a>
+            <a href="/tasks-page" class="active"><i class="fa-solid fa-list-check"></i> Tasks</a>
+            <a href="#" class="logout" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header-area">
+                <h1>Task Management</h1>
+            </div>
+
+            <!-- Create Task Form (Admin Only) -->
+            <div class="admin-panel" id="adminPanel">
+                <h3><i class="fa-solid fa-plus"></i> Create New Task</h3>
+                <div class="form-group">
+                    <label for="projectSelect">Project</label>
+                    <select id="projectSelect">
+                        <option value="">Select Project</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="assigneeSelect">Assignee</label>
+                    <select id="assigneeSelect">
+                        <option value="">Assign To...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="title">Task Title</label>
+                    <input id="title" placeholder="Enter title here">
+                </div>
+                <div class="form-group">
+                    <label for="deadline">Deadline</label>
+                    <input id="deadline" type="date">
+                </div>
+                <div class="form-group" style="width: 100%; flex-basis: 100%;">
+                    <label for="desc">Task Description</label>
+                    <textarea id="desc" placeholder="Provide additional details..."></textarea>
+                </div>
+                <div style="width: 100%; display: flex; justify-content: flex-end;">
+                    <button onclick="createTask()">Create Task</button>
+                </div>
+            </div>
+
+            <!-- Task List -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Project ID</th>
+                        <th>Deadline</th>
+                        <th>Status</th>
+                        <th>Update Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="taskList"></tbody>
+            </table>
+        </main>
+    </div>
+
+    <div id="toast"></div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>

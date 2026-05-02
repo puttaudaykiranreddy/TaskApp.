@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskApp | Log In</title>
+    <link rel="stylesheet" href="/static/landing.css">
+    <style>
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+        .auth-box {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            padding: 50px 40px;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+        .auth-box h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 32px;
+            margin-bottom: 30px;
+        }
+        .auth-box input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
+            color: white;
+            font-size: 16px;
+            box-sizing: border-box;
+            outline: none;
+            transition: 0.3s;
+        }
+        .auth-box input:focus {
+            border-color: #38bdf8;
+            background: rgba(255,255,255,0.1);
+        }
+        .auth-box button {
+            width: 100%;
+            background: linear-gradient(135deg, #7c3aed, #3b82f6);
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 10px 25px rgba(124, 58, 237, 0.3);
+        }
+        .auth-box button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(124, 58, 237, 0.5);
+        }
+        .auth-links {
+            margin-top: 25px;
+            font-size: 14px;
+            color: #94a3b8;
+        }
+        .auth-links a {
+            color: #38bdf8;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        /* Toast style */
+        #toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1e293b;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            opacity: 0;
+            transition: 0.3s;
+            z-index: 1000;
+        }
+        #toast.show { opacity: 1; }
+    </style>
+</head>
+<body class="landing-body">
+    <!-- Animated Background -->
+    <div class="bg-blobs">
+        <div class="blob1"></div>
+        <div class="blob2"></div>
+    </div>
+
+    <div class="auth-container">
+        <div class="auth-box">
+            <h2>Welcome Back</h2>
+            <input id="email" type="email" placeholder="Email Address">
+            <input id="password" type="password" placeholder="Password">
+            <button onclick="login()">Log In</button>
+            <div class="auth-links">
+                Don't have an account? <a href="/signup-page">Sign up</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast"></div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
